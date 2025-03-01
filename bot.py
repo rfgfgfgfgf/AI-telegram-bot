@@ -7,7 +7,7 @@ bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "Привет! Я Шлепа бот. Мой создатель - rfgfgfgfgf. Мои команды: /help, /start, /coin, /weather")
+    bot.reply_to(message, "Привет! Я Шлепа бот. Мой создатель - rfgfgfgfgf. Мои команды: /help, /start, /coin, /weather /help, /start, /command_text")
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
