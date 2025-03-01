@@ -4,9 +4,8 @@ import time
 import requests
 import base64
 from PIL import Image
-from config import *
 from io import BytesIO
-
+from config import *
 class Text2ImageAPI:
 
     def __init__(self, url, api_key, secret_key):
@@ -46,10 +45,17 @@ class Text2ImageAPI:
             data = response.json()
             if data['status'] == 'DONE':
                 return data['images']
-
             attempts -= 1
             time.sleep(delay)
 
+    def save_image(self,base64_string, file_path):
+
+        # Декодируем строку Base64 в бинарные данные
+        decoded_data = base64.b64decode(base64_string)
+        # Создаем объект изображения с помощью PIL
+        image = Image.open(BytesIO(decoded_data))
+        image.save(file_path)  # сохранение изображения на диск
+        print(f'image saved to {file_path}')
 
 if __name__ == '__main__':
     api = Text2ImageAPI('https://api-key.fusionbrain.ai/', API_KEY, SECRET_KEY)
@@ -57,15 +63,4 @@ if __name__ == '__main__':
     uuid = api.generate("Пушистый кот в очках", model_id)
     images = api.check_generation(uuid)[0]
 
-    # Строка Base64, представляющая изображение
-    base64_string = images  # здесь должна быть ваша строка Base64
-
-    # Декодируем строку Base64 в бинарные данные
-    decoded_data = base64.b64decode(base64_string)
-
-    # Создаем объект изображения с помощью PIL
-    image = Image.open(BytesIO(decoded_data))
-
-    # Отображаем изображение (опционально)
-    image.show()
-    image.save("decoded_image.jpg")  # сохранение изображения на диск
+    api.save_image(images,'decoded_image.jpg')
